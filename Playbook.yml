@@ -1,0 +1,44 @@
+---
+- name: Setup Jenkins and Java on ci-master
+  hosts: ci-master
+  become: yes
+  tasks:
+
+    - name: Install Java
+      apt:
+        name: openjdk-11-jdk
+        state: present
+        update_cache: yes
+
+    - name: Install Jenkins
+      apt:
+        name: jenkins
+        state: present
+
+    - name: Start Jenkins service
+      service:
+        name: jenkins
+        state: started
+        enabled: yes
+
+- name: Setup Docker and Java on ci-agent
+  hosts: ci-agent
+  become: yes
+  tasks:
+
+    - name: Install Java
+      apt:
+        name: openjdk-11-jdk
+        state: present
+        update_cache: yes
+
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: present
+
+    - name: Start Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
