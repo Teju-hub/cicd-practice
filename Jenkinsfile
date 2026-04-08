@@ -1,12 +1,12 @@
 pipeline {
-    agent any
+    agent { label 'ci-agent' }
 
     stages {
 
         stage('Pull Code from Git') {
             steps {
                 git branch: 'master',
-                    url: 'https://github.com/YOUR_USERNAME/cicd-practice.git'
+                    url: 'https://github.com/Teju-hub/cicd-practice.git'
             }
         }
 
@@ -18,7 +18,11 @@ pipeline {
 
         stage('Run Docker Container') {
             steps {
-                sh 'docker run -d -p 80:80 --name cicd-container cicd-app'
+                sh '''
+                    docker stop cicd-container || true
+                    docker rm cicd-container || true
+                    docker run -d -p 80:80 --name cicd-container cicd-app
+                '''
             }
         }
 
