@@ -25,12 +25,21 @@
   hosts: ci-agent
   become: yes
   tasks:
-
-    - name: Install Java
+    - name: Remove old Java
       apt:
         name: openjdk-11-jdk
+        state: absent
+
+    - name: Install Java 21
+      apt:
+        name: openjdk-21-jdk
         state: present
         update_cache: yes
+        
+    - name: Install fontconfig
+      apt:
+        name: fontconfig
+        state: present
 
     - name: Install Docker
       apt:
